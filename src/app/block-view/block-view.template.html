@@ -1,0 +1,23 @@
+<ng-container *ngIf="value">
+  <div>
+    {{value.name}}
+    <button (click)="value.canEditCode = !value.canEditCode">Edit</button>
+
+    <!-- <span *ngIf="value.parent"><button (click)="duplicate()">Duplicate</button></span> -->
+
+    <span *ngIf="value.parent"><button (click)="delete()">Delete</button></span>
+
+    <span ><button (click)="onSelect($event)">Select</button></span>
+    <div *ngIf="value.canEditCode" >
+			<input [(ngModel)]="newName" (keydown.enter)="saveName($event)" type="text" class="form-control" />
+      <button (click)="saveName()">Edit</button>
+		</div>
+
+    <block-view
+      *ngFor="let item of value.children"
+      class="m-block-view"
+      [value]="item"
+    >
+    </block-view>
+  </div>
+</ng-container>
