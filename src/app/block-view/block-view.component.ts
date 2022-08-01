@@ -8,7 +8,7 @@ import { BlockService } from '../services/block.service';
 @Component({
   selector: 'block-view',
   templateUrl: './block-view.template.html',
-  styleUrls: ['./block-view.styles.less'],
+  styleUrls: ['./block-view.styles.css'],
 })
 export class BlockComponent<T> {
   @Input()
@@ -24,6 +24,7 @@ export class BlockComponent<T> {
 
   saveName() {
     console.log(this.newName)
+    if(!this.newName) return;
     this.value.name = this.newName;
   }
 

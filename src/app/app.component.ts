@@ -36,48 +36,70 @@ export class AppComponent {
     if (!this.selected) {
       if (block == this.doc) return;
       this.selected = block;
+      this.selected.isSelected = true;
     } else {
-      if (this.selected.isUpRelative(block) || this.selected == block) {
+      if (this.selected.hasDescendant(block) || this.selected == block) {
+        this.selected.isSelected = false;
         this.selected = undefined;
         return;
       }
-      // TODO check if you want to add it to want of its own subblocks
       block.addChild(this.selected)
+      this.selected.isSelected = false;
       this.selected = undefined;
     }
   }
 
   duplicate(block: Block) {
-    /* const newChildren: Block[] = block.children.map(a => {return {...a}})
-    let newBlock: Block = new Block(block.name, block.children, block.parent);
-      newBlock = structuredClone(block);
-    block.parent.addChild(newBlock) */
+    const parent = block.parent;
+
+    const newBlock = this.duplication(block);
+
+    parent.addChild(newBlock);
   }
+
+  duplication(block: Block) {
+    const newB = new Block(block.name, []);
+
+    if (!block.children) {
+      return
+    }
+    block.children.forEach(child => {
+      newB.addChild(this.duplication(child));
+    });
+
+    return newB
+  }
+
 
   setTitleEdit(item) {
     item.canEditCode = true;
   }
 
   newBlock() {
+    if(!this.newName) return;
     let newBlock = new Block(this.newName, [])
     this.doc.addChild(newBlock)
   }
 
   export() {
+
     this.exportedValue = this.convertBlockToString(this.doc)
   }
 
   convertBlockToString(block: Block) {
+    let stringBlock = JSON.stringify(block, ['name', 'children']);
+    console.log(JSON.parse(stringBlock))
+    return stringBlock
+
+    // other possible solution with simple comma seperation
     if (block.children === []) {
       return block.name;
     }
-    else {
-      let returnValue: string = block.name;
-      block.children.forEach(element => {
-        returnValue += ',' + this.convertBlockToString(element)
-      });
-      return returnValue;
-    }
-
+    let returnValue: string = block.name;
+    block.children.forEach(element => {
+      returnValue += ',' + this.convertBlockToString(element)
+    });
+    return returnValue;
   }
+
 }

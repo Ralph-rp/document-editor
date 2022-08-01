@@ -1,16 +1,17 @@
 <ng-container *ngIf="value">
   <div>
     {{value.name}}
-    <button (click)="value.canEditCode = !value.canEditCode">Edit</button>
+    <button (click)="value.canEditCode = !value.canEditCode" class="btn">Edit</button>
 
-    <!-- <span *ngIf="value.parent"><button (click)="duplicate()">Duplicate</button></span> -->
+    <span *ngIf="value.parent"><button (click)="duplicate()" class="btn">Duplicate</button></span>
 
-    <span *ngIf="value.parent"><button (click)="delete()">Delete</button></span>
+    <span *ngIf="value.parent"><button (click)="delete()" class="btn">Delete</button></span>
 
-    <span ><button (click)="onSelect($event)">Select</button></span>
+    <span ><button class="btn" (click)="onSelect($event)" [ngStyle]="{'border-width': this.value.isSelected ? ' 2px' : '1px' }">Select</button></span>
+    <!-- box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1), 0 3px 10px 0 rgba(0,0,0,0.1); -->
     <div *ngIf="value.canEditCode" >
 			<input [(ngModel)]="newName" (keydown.enter)="saveName($event)" type="text" class="form-control" />
-      <button (click)="saveName()">Edit</button>
+      <button (click)="saveName()" class="btn">Save</button>
 		</div>
 
     <block-view
